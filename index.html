@@ -19,7 +19,7 @@
         </div>
         <!--This div ends the jumbotron-->
 
-        <div class="column">
+        <div class="row">
 
             <div class="col-md-12">
 
@@ -48,118 +48,120 @@
                             </tbody>
                         </table>
                     </div>
-                    <!--This div ends the card-->
+                    <!--This div ends the card declaration-->
                 </div>
-                <!--This div ends the columns-->
+                <!--This div ends the card body-->
             </div>
-            <!--This div ends the row-->
-
-            <!--Form starts here-->
-            <div class="row">
-                <div class="col-md-12">
-
-                    <div class="card mb-4">
-                        <div class="card-header">Add a train</div>
-                        <div class="card-body">
-                            <form id="train-form" class="form-group">
-                                <label for="train-input">Train Name</label><br>
-                                <input type="text" id="train-name-input" class="form-control"><br>
-
-                                <label for="train-input">Destination</label><br>
-                                <input type="text" id="destination-input" class="form-control"><br>
-
-                                <label for="train-input">First Train Time (HH:mm - military time)</label><br>
-                                <input type="text" id="train-time-input" class="form-control"><br>
-
-                                <label for="train-input">Frequency</label><br>
-                                <input type="text" id="frequency-input" class="form-control"><br>
-
-                                <!-- This button will trigger the communication with firebase -->
-                                <input id="add-train" type="submit" class="btn btn-primary value=" Submit">
-                            </form>
-
-                        </div>
-                        <!--This div ends the card body-->
-                    </div>
-                    <!--This div ends the card-->
-                </div>
-                <!--This div closes the 12 columns-->
-            </div>
-            <!--This div closes the second row-->
-
+            <!--This div ends the columns-->
         </div>
-        <!--This div ends the container-->
+        <!--This div ends the row-->
+
+        <!--Form starts here-->
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="card mb-4">
+                    <div class="card-header">Add a train</div>
+                    <div class="card-body">
+                        <form id="train-form" class="form-group">
+                            <label for="train-input">Train Name</label><br>
+                            <input type="text" id="train-name-input" class="form-control"><br>
+
+                            <label for="train-input">Destination</label><br>
+                            <input type="text" id="destination-input" class="form-control"><br>
+
+                            <label for="train-input">First Train Time (HH:mm - military time)</label><br>
+                            <input type="text" id="train-time-input" class="form-control"><br>
+
+                            <label for="train-input">Frequency</label><br>
+                            <input type="text" id="frequency-input" class="form-control"><br>
+
+                            <!-- This button will trigger the communication with firebase -->
+                            <input id="add-train" type="submit" class="btn btn-primary value=" Submit">
+                        </form>
+
+                    </div>
+                    <!--This div ends the card body-->
+                </div>
+                <!--This div ends the card-->
+            </div>
+            <!--This div closes the 12 columns-->
+        </div>
+        <!--This div closes the second row-->
+
+    </div>
+    <!--This div ends the container-->
 
 
 
 
-        <script src="https://www.gstatic.com/firebasejs/5.10.1/firebase.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <script>
-            //on click add the new html elements to the table, table row and table data
-            //communicate with firebase to log in the new entry
-            //ensure calcualted fields are accuruate
+    <script src="https://www.gstatic.com/firebasejs/5.10.1/firebase.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+        //on click add the new html elements to the table, table row and table data
+        //communicate with firebase to log in the new entry
+        //ensure calcualted fields are accuruate
 
 
-            // Initialize Firebase
-            var config = {
-                apiKey: "AIzaSyDaudXlzcdQgwlXvkuWc3Szwcg1T6xhdkQ",
-                authDomain: "getting-started-with-databases.firebaseapp.com",
-                databaseURL: "https://getting-started-with-databases.firebaseio.com",
-                projectId: "getting-started-with-databases",
-                storageBucket: "getting-started-with-databases.appspot.com",
-                messagingSenderId: "758220706146"
-            };
-            firebase.initializeApp(config);
-            var database = firebase.database();
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyDaudXlzcdQgwlXvkuWc3Szwcg1T6xhdkQ",
+            authDomain: "getting-started-with-databases.firebaseapp.com",
+            databaseURL: "https://getting-started-with-databases.firebaseio.com",
+            projectId: "getting-started-with-databases",
+            storageBucket: "getting-started-with-databases.appspot.com",
+            messagingSenderId: "758220706146"
+        };
+        firebase.initializeApp(config);
+        var database = firebase.database();
 
 
-            //on click event
-            $("#add-train").on("click", function (event) {
-                // event.preventDefault() can be used to prevent an event's default behavior.
-                // Here, it prevents the submit button from trying to submit a form when clicked
-                event.preventDefault();
+        //on click event
+        $("#add-train").on("click", function (event) {
+            // event.preventDefault() can be used to prevent an event's default behavior.
+            // Here, it prevents the submit button from trying to submit a form when clicked
+            event.preventDefault();
 
-                // Here we grab the text from the input box
-                var addTrain = $("#train-name-input").val().trim();
-                var destination = $("#destination-input").val().trim();
-                var firstTrain = $("#train-time-input").val().trim();
-                var frequency = $("#frequency-input").val().trim();
+            // Here we grab the text from the input box
+            var addTrain = $("#train-name-input").val().trim();
+            var destination = $("#destination-input").val().trim();
+            var firstTrain = $("#train-time-input").val().trim();
+            var frequency = $("#frequency-input").val().trim();
 
-                console.log(addTrain, destination, firstTrain, frequency);
-                //empty the fields for the user
-                $("#train-name-input").val("");
-                $("#destination-input").val("");
-                $("#train-time-input").val("");
-                $("#frequency-input").val("");
+            console.log(addTrain, destination, firstTrain, frequency);
+            //empty the fields for the user
+            $("#train-name-input").val("");
+            $("#destination-input").val("");
+            $("#train-time-input").val("");
+            $("#frequency-input").val("");
 
-                //pushing to firebase
-                database.ref().push({
-                    Train: addTrain,
-                    Destination: destination,
-                    FirstTime: firstTrain,
-                    Frequency: frequency
-                });
+            //pushing to firebase
+            database.ref().push({
+                Train: addTrain,
+                Destination: destination,
+                FirstTime: firstTrain,
+                Frequency: frequency
             });
+        });
 
-            //listening for the object on firebase
-            database.ref().on("child_added", function (snapshot) {
-                //evaluates the value of the firebase response
-                var snap = snapshot.val();
+        //listening for the object on firebase
+        database.ref().on("child_added", function (snapshot) {
+            //evaluates the value of the firebase response
+            var snap = snapshot.val();
 
-                console.log(snap.Train);
-                console.log(snap.Destination);
-                console.log(snap.FirstTime);
-                console.log(snap.Frequency);
+            console.log(snap.Train);
+            console.log(snap.Destination);
+            console.log(snap.FirstTime);
+            console.log(snap.Frequency);
 
-                //when firebase confirms the data entry, append the data via html elements
-                $("#train-table").append("<tr><td class='sample'><strong>" + snap.Train + "</strong></td><td>" + snap.Destination + "</td><td>" + snap.FirstTime + "</td><td>" + snap.Frequency + "</td><td>" + "placeholder" + "</td></tr>");
-            });
+            //when firebase confirms the data entry, append the data via html elements
+            $("#train-table").append("<tr><td class='sample'><strong>" + snap.Train + "</strong></td><td>" + snap.Destination + "</td><td>" + snap.FirstTime + "</td><td>" + snap.Frequency + "</td><td>" + "placeholder" + "</td></tr>");
+        });
 
             //.dif and moment.js for the minutes away
 
 
-        </script>
+    </script>
 </body>
 
 </html>

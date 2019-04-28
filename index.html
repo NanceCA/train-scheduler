@@ -39,11 +39,11 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <th scope="row">California Caravan</th>
+                                    <!-- <th scope="row">California Caravan</th>
                                     <td>Los Angeles</td>
                                     <td>50</td>
                                     <td>16:30</td>
-                                    <td>60</td>
+                                    <td>60</td> -->
                                 </tr>
                             </tbody>
                         </table>
@@ -71,13 +71,13 @@
                             <input type="text" id="destination-input" class="form-control"><br>
 
                             <label for="train-input">First Train Time (HH:mm - military time)</label><br>
-                            <input type="text" id="train-time-input" class="form-control"><br>
+                            <input type="time" id="train-time-input" class="form-control"><br>
 
                             <label for="train-input">Frequency</label><br>
                             <input type="text" id="frequency-input" class="form-control"><br>
 
                             <!-- This button will trigger the communication with firebase -->
-                            <input id="add-train" type="submit" class="btn btn-primary value=" Submit">
+                            <input id="add-train" type="submit" class="btn btn-primary" value="Submit">
                         </form>
 
                     </div>
@@ -97,6 +97,7 @@
 
     <script src="https://www.gstatic.com/firebasejs/5.10.1/firebase.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
     <script>
         //on click add the new html elements to the table, table row and table data
         //communicate with firebase to log in the new entry
@@ -149,13 +150,40 @@
             //evaluates the value of the firebase response
             var snap = snapshot.val();
 
-            console.log(snap.Train);
-            console.log(snap.Destination);
-            console.log(snap.FirstTime);
-            console.log(snap.Frequency);
+            console.log("Train name is " + snap.Train);
+            console.log("Destination is " + snap.Destination);
+            console.log("First departure time is " + snap.FirstTime);
+            console.log("Frequency is " + snap.Frequency);
 
+
+            //-----------------------------------------------------------------//
+            //begin moment calculations here
+            var tFreq = snap.Frequency;
+
+            //convert train first time
+            var firstTimeConverted = moment(snap.FirstTime, "HH:mm").subtract(1, "years");
+
+            //find difference in the tiems
+            var currentTime = moment(moment()).format("hh:mm");
+            var difference = moment().diff(moment(firstTimeConverted), "minutes");
+            console.log("the difference in time is " + difference);
+
+            //train time apart
+            var tRemainder = difference % tFreq;
+            console.log("Remainder " + tRemainder);
+
+            //minutes until train
+            var tMinTill = tFreq - tRemainder;
+            console.log("Minutes until train: " + tMinTill);
+
+            //next arrival
+            var upcoming = moment().add(tMinTill, "minutes");
+            upcoming = moment(upcoming).format("hh:mm");
+            console.log("The next train will arrive at: " + upcoming);
+
+            //----------------------------------------------------------------//
             //when firebase confirms the data entry, append the data via html elements
-            $("#train-table").append("<tr><td class='sample'><strong>" + snap.Train + "</strong></td><td>" + snap.Destination + "</td><td>" + snap.FirstTime + "</td><td>" + snap.Frequency + "</td><td>" + "placeholder" + "</td></tr>");
+            $("#train-table").append("<tr><td class='sample'><strong>" + snap.Train + "</strong></td><td>" + snap.Destination + "</td><td>" + snap.Frequency + " minutes" + "</td><td>" + upcoming + "</td><td>" + tMinTill + "</td></tr>");
         });
 
             //.dif and moment.js for the minutes away
